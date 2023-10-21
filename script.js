@@ -7,15 +7,13 @@ function drawChart() {
   var container = document.getElementById('chart_div');
   var chart = new google.visualization.Timeline(container);
   var dataTable = new google.visualization.DataTable();
-  dataTable.addColumn({ type: 'string', id: 'Position' });
-  dataTable.addColumn({ type: 'string', id: 'Name' });
+  dataTable.addColumn({ type: 'string', id: 'Stage' });
   dataTable.addColumn({ type: 'date', id: 'Start' });
   dataTable.addColumn({ type: 'date', id: 'End' });
 
   orderData.forEach((order) => {
-    var orderName = order.orderName;
-    order.orderItems.forEach((item) => {
-      dataTable.addRow([item[0], item[1], item[2], item[3]]);
+    order.forEach((stage) => {
+      dataTable.addRow([stage[0], stage[1], stage[2]]);
     });
   });
 
