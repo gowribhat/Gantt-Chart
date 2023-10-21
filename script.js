@@ -1,30 +1,23 @@
-import { ganttData } from "./data.js";
+import { orderData } from "./data.js";
 
-google.charts.load('current', {'packages':['gantt']});
+google.charts.load("current", {packages:["timeline"]});
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
-  var data = new google.visualization.DataTable();
-  data.addColumn('string', 'Task ID');
-  data.addColumn('string', 'Task Name');
-  data.addColumn('date', 'Start Time');
-  data.addColumn('date', 'End Time');
-  data.addColumn('number', 'Duration');
-  data.addColumn('number', 'Percent Complete');
-  data.addColumn('string', 'Dependencies');
+  var container = document.getElementById('chart_div');
+  var chart = new google.visualization.Timeline(container);
+  var dataTable = new google.visualization.DataTable();
+  dataTable.addColumn({ type: 'string', id: 'Position' });
+  dataTable.addColumn({ type: 'string', id: 'Name' });
+  dataTable.addColumn({ type: 'date', id: 'Start' });
+  dataTable.addColumn({ type: 'date', id: 'End' });
 
-  data.addRows(ganttData);
+  orderData.forEach((order) => {
+    var orderName = order.orderName;
+    order.orderItems.forEach((item) => {
+      dataTable.addRow([item[0], item[1], item[2], item[3]]);
+    });
+  });
 
-  var options = {
-    height: 275,
-    width: 800,
-    hAxis: {
-      title: 'Time (in seconds)',
-      format: 'decimal', // Use 's' for seconds
-    },
-  };
-
-  var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
-
-  chart.draw(data, options);
+  chart.draw(dataTable);
 }
